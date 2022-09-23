@@ -16,22 +16,11 @@ const Capture = () => {
     const capture = React.useCallback(
         () => {
         const imageSrc = webcamRef.current.getScreenshot();
-        setImage(imageSrc); 
-        // const convertedFile =b64toFile(imageSrc,'image-test');
-        const url='http://172.17.0.2:5000/capture?';
-        
-        const params='image='.concat(imageSrc);
-        fetch(url.concat(params),{
-          method:'POST',
-        })
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-        },
-        
-        [webcamRef]
-        
-    );
+        setImage(imageSrc);   
+        }   
+        ,[webcamRef]
+      
+        ); 
     const chal=(e)=>{
       e.preventDefault();
       capture();
