@@ -1,10 +1,11 @@
-import React, { Component,useState } from "react";
+import React, { useState } from "react";
 import '../page-styles/Forms.css'
 import { Link } from "react-router-dom";
 import Webcam from "react-webcam";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import axios from 'axios';
 
 const Register =() => {
 
@@ -14,9 +15,12 @@ const Register =() => {
     const [email,setEmail]=useState('');
     const [sapid,setSapid]=useState('');
     const [image,setImage]=useState('');
+    const [user_type,setUser]=useState('');
+    const [resp,setResp]=useState('');
 
     const handleInputChange = (e) => {
       const {id , value} = e.target;
+      console.log()
       if(id === "name"){
         setName(value);
       }
@@ -32,6 +36,23 @@ const Register =() => {
       if(id === "sapid"){
         setSapid(value);
       }
+      if(id === "admin"){
+        setUser(value)
+      }
+      if(id === "student"){
+        setUser(value)
+        
+      }
+      let content={
+        name:name,
+        username:username,
+        password:password,
+        email:email,
+        sapid:sapid,
+        image:image,
+        is_admin:user_type 
+      }
+      console.log(content)
 
     }
     
@@ -46,28 +67,36 @@ const Register =() => {
         
         }   
         
-    
+  const Response_from_back=()=>{
+    return{
+      __html:`<h1>{resp}</h1>`
+    };
+  }
   const handleSubmit  = async (e) => {
     e.preventDefault();
-    const image =await capture();
-    const body={
-        'name':name,
-        'username':username,
-        'password':password,
-        'email':email,
-        'sapid':sapid,
-        'image':image,
-        'is_admin':false
+    // const image = capture();
+    const image="heeee"
+    let content={
+        name:name,
+        username:username,
+        password:password,
+        email:email,
+        sapid:sapid,
+        image:image,
+        is_admin:user_type 
       }
-    console.log(body);
-    const url='http://172.17.0.2:5000/register';
-      fetch(url,{
-      method:'POST',
-      body:JSON.stringify(body),})
-        .then(response => response.json())
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-      }
+    console.log(content);
+    // const url='http://172.17.0.2:5000/register';
+    const url='http://127.0.0.1:5000/register'
+        await axios.post(url, content)
+        .then(response => 
+          console.log(response)
+          )
+        .catch(error => {
+        console.error('There was an error!', error);
+        });
+        console.log(resp);
+    }
     // console.log("The form was submitted with the following data:");
     // console.log(this.state);
     
@@ -78,6 +107,17 @@ const Register =() => {
         
         <div className='login-form'>
           <div className="formCenter">
+            <div className="Message-container">
+            {(() => {
+              if (resp!=='') {
+                return (
+                  <div dangerouslySetInnerHTML={Response_from_back()} />
+                )
+            }})()}
+                
+              
+               
+            </div>
             <form className="formFields" onSubmit={(e)=>handleSubmit(e)}>
               <Row><Col>
               <Row>
@@ -169,6 +209,30 @@ const Register =() => {
                   onChange={(e) => handleInputChange(e)}
                 /></Col>
               </div>
+              <div className="radio">
+                <label>
+                  <input
+                    type="radio"
+                    id="admin"
+                    value="admin"
+                    // checked={}
+                    onChange={(e) => {handleInputChange(e)}}
+                  />
+                  Admin
+                </label>
+              </div>
+              <div className="radio">
+                <label>
+                  <input
+                    type="radio"
+                    id="student"
+                    value="student"
+                    // checked={}
+                    onChange={(e) => {handleInputChange(e)}}
+                  />
+                  Student
+                </label>
+              </div>
               <div className="formField">
               <Col>
                 <label className="formFieldLabel" htmlFor="terms">
@@ -199,14 +263,14 @@ const Register =() => {
               </Col>
               <Col>
               <div className="web-cam" >
-                <Webcam
+                {/* <Webcam
                   audio={false}
                   height={300}
                   ref={webcamRef}
                   screenshotFormat="image/jpeg"
                   width={640}
                   videoConstraints={videoConstraints}
-                />
+                /> */}
                 </div>
               </Col>
               </Row>
