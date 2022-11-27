@@ -263,14 +263,14 @@ const Register =() => {
               </Col>
               <Col>
               <div className="web-cam" >
-                {/* <Webcam
+                <Webcam
                   audio={false}
                   height={300}
                   ref={webcamRef}
                   screenshotFormat="image/jpeg"
                   width={640}
                   videoConstraints={videoConstraints}
-                /> */}
+                />
                 </div>
               </Col>
               </Row>

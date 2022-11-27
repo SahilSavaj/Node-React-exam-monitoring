@@ -28,7 +28,8 @@ function response_parser(body,response){
 app.post("/register",async (req,res)=>{
     const myuser=req.body
     console.log(myuser) 
-    const resp=await Register(myuser)
+    const resp= await Register(myuser)
+    console.log(resp)
     if (resp[0]!==200){
         res.status(resp[0]).send(response_parser(resp[1],resp[0]));
     }
